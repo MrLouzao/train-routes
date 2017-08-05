@@ -3,6 +3,9 @@ package com.though.train.model;
 import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StationGraph extends Graph {
@@ -11,23 +14,47 @@ public class StationGraph extends Graph {
     private Map<String, Station> mapStationByName;
 
 
-    public StationGraph(Map<String, Station> mapStationByName) {
+    public StationGraph() {
         super();
-        this.mapStationByName = mapStationByName;
+        this.mapStationByName = new HashMap<>();
     }
 
 
     @Override
     public void addPath(Path path) throws PathAlreadyExistsException {
         super.addPath(path);
+
         Station from = (Station) path.getFrom();
         Station to = (Station) path.getTo();
-        if(!this.mapStationByName.containsKey(from.getStationName())){
-            this.mapStationByName.put(from.getStationName(), from);
+        if(!this.mapStationByName.containsKey(from.getId())){
+            this.mapStationByName.put(from.getId(), from);
         }
-        if(!this.mapStationByName.containsKey(to.getStationName())){
-            this.mapStationByName.put(to.getStationName(), to);
+        if(!this.mapStationByName.containsKey(to.getId())){
+            this.mapStationByName.put(to.getId(), to);
         }
+
+    }
+
+
+    @Override
+    public Path getPath(Node from, Node to){
+        Station fromStation = (Station) from;
+        Station toStation = (Station) to;
+
+        if(super.mapNodePaths.containsKey(fromStation)){
+            List<Path> pathsRelated = super.mapNodePaths.get(fromStation);
+            for(Path path : pathsRelated){
+                if(toStation.equals((Station)path.getTo())){
+                    return path;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public Boolean existsStationByName(String stationName){
+        return this.mapStationByName.containsKey(stationName);
     }
 
 
@@ -35,7 +62,7 @@ public class StationGraph extends Graph {
     protected String pathAlreadyExistsMsg(Path path) {
         Station from = (Station) path.getFrom();
         Station to = (Station) path.getTo();
-        return "Route between " + from.getStationName() + " and " + to.getStationName() + " already exists";
+        return "Route between " + from.getId() + " and " + to.getId() + " already exists";
     }
 
 

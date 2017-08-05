@@ -9,11 +9,14 @@ import java.util.Map;
 
 public abstract class Graph {
 
+
+
     protected Map<Node, List<Path>> mapNodePaths;
 
-    public Graph() {
+    protected Graph() {
         this.mapNodePaths = new HashMap<Node, List<Path>>();
     }
+
 
     public void addPath(Path path) throws PathAlreadyExistsException{
 

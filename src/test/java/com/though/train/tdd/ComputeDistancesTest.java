@@ -1,4 +1,4 @@
-package com.though.train;
+package com.though.train.tdd;
 
 
 import org.junit.Assert;

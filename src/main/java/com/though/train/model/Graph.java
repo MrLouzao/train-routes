@@ -9,7 +9,7 @@ import java.util.Map;
 
 public abstract class Graph {
 
-    private Map<Node, List<Path>> mapNodePaths;
+    protected Map<Node, List<Path>> mapNodePaths;
 
     public Graph() {
         this.mapNodePaths = new HashMap<Node, List<Path>>();

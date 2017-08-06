@@ -35,11 +35,11 @@ public class GraphDeepFirstRepeatedNodesDistanceLimit {
 
         // If from = to, get all the next adjacent nodes as start node of the tree
         if(from.equals(to)){
-            List<Node> adjacents = this.obtainAdjacentNodes(from);
+            List<Node> adjacents = GraphAlgorithmUtil.obtainAdjacentNodes(from, this.mapAdjacentNodes);
             route.add(from);
             for(Node adjacent : adjacents){
                 route.add(adjacent);
-                Integer distanceOriginToAdj = this.obtainDistanceBetweenNodes(from, adjacent);
+                Integer distanceOriginToAdj = GraphAlgorithmUtil.obtainDistanceBetweenNodes(from, adjacent, this.mapAdjacentNodes);
                 this.searchAndPrintAllRoutesWithDepthLimit(adjacent, to, route, allAvailableRoutes, distanceOriginToAdj, maxDistance);
             }
         }
@@ -58,14 +58,14 @@ public class GraphDeepFirstRepeatedNodesDistanceLimit {
 
         // If alg reachs the destination, add the list of nodes to constructed routes
         if(from.equals(to)){
-            this.printAllNodesForRoute(route, currentDistance);
-            constructedRoutes.add(this.cloneNodeList(route));
+            GraphAlgorithmUtil.printAllNodesForRoute(route, currentDistance);
+            constructedRoutes.add(GraphAlgorithmUtil.cloneNodeList(route));
         }
 
-        List<Node> adjacentNodes = this.obtainAdjacentNodes(from);
+        List<Node> adjacentNodes = GraphAlgorithmUtil.obtainAdjacentNodes(from, this.mapAdjacentNodes);
         for(Node adjacentNode : adjacentNodes){
             //Only proccess next node if the distance between nodes ir less than max
-            Integer distanceOriginToAdj = this.obtainDistanceBetweenNodes(from, adjacentNode);
+            Integer distanceOriginToAdj = GraphAlgorithmUtil.obtainDistanceBetweenNodes(from, adjacentNode, this.mapAdjacentNodes);
             if((currentDistance+distanceOriginToAdj) < maxDistance){
                 route.add(adjacentNode);
                 this.searchAndPrintAllRoutesWithDepthLimit(adjacentNode, to, route, constructedRoutes, currentDistance+distanceOriginToAdj, maxDistance);
@@ -74,65 +74,8 @@ public class GraphDeepFirstRepeatedNodesDistanceLimit {
         }
 
         //Finally, remove each node from path to go back within the tree (to re-visit parent nodes)
-        this.removeNodeFromVisitedNodesById(from.getId(), route);
+        GraphAlgorithmUtil.removeNodeFromVisitedNodesById(from.getId(), route);
     }
 
-
-    private List<Node> cloneNodeList(List<Node> list) throws PathSearchException {
-        List<Node> clone = new ArrayList<Node>(list.size());
-        try{
-            for (Node item : list) clone.add((Node)item.clone());
-            return clone;
-        }catch(CloneNotSupportedException ex){
-            throw new PathSearchException("Error while processing route on search");
-        }
-    }
-
-
-    /**
-     * Remove first occurence of a node starting for the last element of the array
-     * @param nodeId
-     * @param route
-     */
-    private void removeNodeFromVisitedNodesById(String nodeId, List<Node> route){
-        for(int i=route.size(); i>0; i--){
-            if(route.get(i-1).getId().equals(nodeId)){
-                route.remove(i-1);
-                break;//to break on first occurence
-            }
-        }
-    }
-
-
-    private List<Node> obtainAdjacentNodes(Node from){
-        List<Node> adjacentNodes = new ArrayList<>();
-        List<Path> outPaths = this.mapAdjacentNodes.get(from);
-        for(Path outPath : outPaths){
-            adjacentNodes.add(outPath.getTo());
-        }
-        return adjacentNodes;
-    }
-
-
-    private Integer obtainDistanceBetweenNodes(Node from, Node to){
-        List<Path> outPaths = this.mapAdjacentNodes.get(from);
-        for(Path path : outPaths){
-            if(path.getTo().equals(to)){
-                return path.getDistance();
-            }
-        }
-        return null;
-    }
-
-
-    private void printAllNodesForRoute(List<Node> route, Integer totalDistance){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Route: ");
-        for(Node node : route){
-            sb.append(node.getId() + " ");
-        }
-        sb.append("; distance = " + totalDistance);
-        System.out.println(sb.toString());
-    }
 
 }

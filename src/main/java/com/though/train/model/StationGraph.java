@@ -81,4 +81,12 @@ public class StationGraph extends Graph {
         super.printAllPossiblePaths((Node)from, (Node)to);
     }
 
+
+    public List<List<Node>> obtainAllPossibleRoutes(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+        Station from = (Station)this.getNodeByStationId(stationFrom);
+        Station to = (Station) this.getNodeByStationId(stationTo);
+        return super.obtainAllPossibleRoutes((Node)from, (Node)to);
+    }
+
+
 }

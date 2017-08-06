@@ -74,22 +74,33 @@ public class ThoughtWorksTest {
     @Test
     public void get_number_of_trips_from_C_to_C_with_3_stops_maximum() throws NotFoundException, CloneNotSupportedException {
         //Expected: 2
-        this.manager.printAllRoutes("C", "C");
+        Integer numberOfTrips = this.manager.getNumberOfRoutesLessOrEqualsThanGivenStops("C", "C", 3);
+        Assert.assertSame(2, numberOfTrips);
     }
 
 
-    public void get_number_of_trips_from_A_to_CS_with_exactly_4_stops(){
+    @Test
+    public void get_number_of_trips_from_A_to_C_with_exactly_4_stops() throws NotFoundException, CloneNotSupportedException {
         //Expected: 3
+        // This might use the route
+        Integer numberOfTrips = this.manager.getNumberOfRoutesExactlyGivenStops("A", "C", 4);
+        Assert.assertSame(3, numberOfTrips);
     }
 
 
-    public void get_length_of_shortest_path_from_A_to_C(){
+    @Test
+    public void get_length_of_shortest_path_from_A_to_C() throws NotFoundException, CloneNotSupportedException {
         //Expected: 9
+        Integer bestDistance = this.manager.getShortestPathBetweenStations("A", "C");
+        Assert.assertSame(9, bestDistance);
     }
 
 
-    public void get_length_of_shortest_path_from_B_to_B(){
+    @Test
+    public void get_length_of_shortest_path_from_B_to_B() throws NotFoundException, CloneNotSupportedException {
         //Expected: 9
+        Integer bestDistance = this.manager.getShortestPathBetweenStations("B", "B");
+        Assert.assertSame(9, bestDistance);
     }
 
 

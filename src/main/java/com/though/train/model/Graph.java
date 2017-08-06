@@ -75,6 +75,13 @@ public abstract class Graph {
     }
 
 
+    public List<List<Node>> obtainAllPossibleRoutes(Node from, Node to) throws CloneNotSupportedException {
+        GraphDeepFirstSearch dfsSearch = new GraphDeepFirstSearch(this.mapNodePaths);
+        return dfsSearch.printAllPossiblePaths(from, to);
+    }
+
+
+
     protected String pathAlreadyExistsMsg(Path path){
         return "Path already exists in graph";
     }

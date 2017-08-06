@@ -6,6 +6,7 @@ import com.though.train.config.AppConfig;
 import com.though.train.exception.BadFormatException;
 import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.model.Node;
 import com.though.train.model.Path;
 import com.though.train.model.StationGraph;
 import org.junit.Assert;
@@ -55,7 +56,7 @@ public class ComputeDistancesTest {
     @Test(expected = NotFoundException.class)
     public void compute_distance_between_sibling_nodes_path_not_exists() throws NotFoundException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        Integer distance = manager.getDistanceBetweenStations("A", "X");
+        Integer distance = manager.getDistanceBetweenStations("A", "R");
     }
 
 
@@ -72,19 +73,35 @@ public class ComputeDistancesTest {
     }
 
 
-    /*@Test
-    public void obtain_number_of_possible_paths(){
+    @Test
+    public void obtain_number_of_possible_routes() throws NotFoundException, CloneNotSupportedException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        Set<List<Path>> possiblePaths = manager.findRoutesBetweenStations("A", "A");
-        Assert.assertSame(2, possiblePaths.size());
-    }*/
+        List<List<Node>> possibleRoutes = manager.getAllAvailableRoutesBetweenStations("A", "A");
+        Assert.assertSame(5, possibleRoutes.size());
+    }
 
 
     @Test
-    public void print_all_possible_routes() throws NotFoundException, CloneNotSupportedException {
+    public void obtain_number_of_possible_routes_with_less_than_4_stops() throws NotFoundException, CloneNotSupportedException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        manager.printAllRoutes("A", "A");
+        Integer numberOfStops = manager.getNumberOfRoutesLessOrEqualsThanGivenStops("A", "A", 4);
+        Assert.assertSame(4, numberOfStops);
     }
 
+
+    @Test
+    public void obtain_number_of_possible_routes_with_exactly_4_stops() throws NotFoundException, CloneNotSupportedException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer numberOfStops = manager.getNumberOfRoutesExactlyGivenStops("A", "A", 4);
+        Assert.assertSame(1, numberOfStops);
+    }
+
+
+    @Test
+    public void obtain_shortest_route_between_two_nodes() throws NotFoundException, CloneNotSupportedException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer routeLength = manager.getShortestPathBetweenStations("A", "A");
+        Assert.assertSame(9, routeLength);
+    }
 
 }

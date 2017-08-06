@@ -2,14 +2,13 @@ package com.though.train.algorithm;
 
 
 import com.though.train.exception.NotFoundException;
+import com.though.train.model.Node;
 import com.though.train.model.Path;
 import com.though.train.model.Station;
 import com.though.train.model.StationGraph;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class StationGraphManager {
 
@@ -61,17 +60,62 @@ public class StationGraphManager {
         }
 
 
-
-       /* public Set<List<Path>> findPathsBetweenStationsWithMaxStops(String stationFrom, String stationTo, Integer maxStops){
-
-
-
-        }*/
-
-
-        public Integer getShortestPathBetweenStations(String stationFrom, String stationTo){
-            //TODO implement algorithm
-            return null;
+        public Integer getNumberOfRoutesLessOrEqualsThanGivenStops(String stationFrom, String stationTo, Integer numberOfStops) throws NotFoundException, CloneNotSupportedException {
+            List<List<Node>> availableRoutes = this.getAllAvailableRoutesBetweenStations(stationFrom, stationTo);
+            int counter = 0;
+            for(List<Node> route : availableRoutes){
+                if(route.size()-1<=numberOfStops){
+                    counter++;
+                }
+            }
+            return counter;
         }
+
+
+        public Integer getNumberOfRoutesExactlyGivenStops(String stationFrom, String stationTo, Integer numberOfStops) throws NotFoundException, CloneNotSupportedException {
+            List<List<Node>> availableRoutes = this.getAllAvailableRoutesBetweenStations(stationFrom, stationTo);
+            int counter = 0;
+            for(List<Node> route : availableRoutes){
+                Integer numberStopsForRoute = route.size()-1;
+                if( numberStopsForRoute.equals(numberOfStops) ){
+                    counter++;
+                }
+            }
+            return counter;
+        }
+
+
+        public List<List<Node>> getAllAvailableRoutesBetweenStations(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+            return this.graph.obtainAllPossibleRoutes(stationFrom, stationTo);
+        }
+
+
+        public Integer getShortestPathBetweenStations(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+            List<List<Node>> availableRoutes = this.getAllAvailableRoutesBetweenStations(stationFrom, stationTo);
+
+            Integer bestDistance = null;
+            for(List<Node> route : availableRoutes){
+
+                Integer distanceOfRoute =
+                        this.getDistanceOfRoute( this.buildListOfNodeId(route) );
+
+                if(bestDistance == null || distanceOfRoute < bestDistance){
+                    bestDistance = distanceOfRoute;
+                }
+
+            }
+
+            return bestDistance;
+        }
+
+
+        private List<String> buildListOfNodeId(List<Node> nodes){
+            List<String> nodeIds = new ArrayList<>();
+            for(Node node : nodes){
+                nodeIds.add(node.getId());
+            }
+            return nodeIds;
+        }
+
 
 }

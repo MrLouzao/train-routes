@@ -71,8 +71,10 @@ public class ThoughtWorksTest {
     }
 
 
-    public void get_number_of_trips_from_C_to_C_with_3_stops_maximum(){
+    @Test
+    public void get_number_of_trips_from_C_to_C_with_3_stops_maximum() throws NotFoundException, CloneNotSupportedException {
         //Expected: 2
+        this.manager.printAllRoutes("C", "C");
     }
 
 

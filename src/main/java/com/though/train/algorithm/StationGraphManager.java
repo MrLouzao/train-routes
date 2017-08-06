@@ -7,7 +7,9 @@ import com.though.train.model.Station;
 import com.though.train.model.StationGraph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StationGraphManager {
 
@@ -52,6 +54,20 @@ public class StationGraphManager {
 
             return distance;
         }
+
+
+        public void printAllRoutes(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+            this.graph.printAllPossiblePaths(stationFrom, stationTo);
+        }
+
+
+
+       /* public Set<List<Path>> findPathsBetweenStationsWithMaxStops(String stationFrom, String stationTo, Integer maxStops){
+
+
+
+        }*/
+
 
         public Integer getShortestPathBetweenStations(String stationFrom, String stationTo){
             //TODO implement algorithm

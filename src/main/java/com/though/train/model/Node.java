@@ -3,7 +3,7 @@ package com.though.train.model;
 import java.io.Serializable;
 
 
-public abstract class Node implements Serializable{
+public abstract class Node implements Serializable, Cloneable{
 
     private String id;
 
@@ -29,6 +29,12 @@ public abstract class Node implements Serializable{
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 }

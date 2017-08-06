@@ -6,6 +6,7 @@ import com.though.train.config.AppConfig;
 import com.though.train.exception.BadFormatException;
 import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.model.Path;
 import com.though.train.model.StationGraph;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ComputeDistancesTest {
 
@@ -25,6 +27,18 @@ public class ComputeDistancesTest {
         lines.add("AB5");
         lines.add("BC4");
         lines.add("BD2");
+        lines.add("CA3");
+        lines.add("DE1");
+        lines.add("ED3");
+        lines.add("EA1");
+
+        lines.add("AX3");
+        lines.add("XY2");
+        lines.add("XZ5");
+        lines.add("XM2");
+        lines.add("YA4");
+        lines.add("ZA9");
+        lines.add("MA7");
 
         this.graph = AppConfig.createStationGraphFromLines(lines);
     }
@@ -58,6 +72,19 @@ public class ComputeDistancesTest {
     }
 
 
+    /*@Test
+    public void obtain_number_of_possible_paths(){
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Set<List<Path>> possiblePaths = manager.findRoutesBetweenStations("A", "A");
+        Assert.assertSame(2, possiblePaths.size());
+    }*/
+
+
+    @Test
+    public void print_all_possible_routes() throws NotFoundException, CloneNotSupportedException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        manager.printAllRoutes("A", "A");
+    }
 
 
 }

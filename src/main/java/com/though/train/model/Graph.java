@@ -1,5 +1,6 @@
 package com.though.train.model;
 
+import com.though.train.algorithm.GraphDeepFirstSearch;
 import com.though.train.exception.PathAlreadyExistsException;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ import java.util.Map;
 public abstract class Graph {
 
 
-
     protected Map<Node, List<Path>> mapNodePaths;
+
 
     protected Graph() {
         this.mapNodePaths = new HashMap<Node, List<Path>>();
@@ -60,6 +61,17 @@ public abstract class Graph {
         return paths.parallelStream()
                 .mapToInt(Path::getDistance)
                 .sum();
+    }
+
+
+    /**
+     * Print all paths following the DFS algorithm
+     * @param from
+     * @param to
+     */
+    public void printAllPossiblePaths(Node from, Node to) throws CloneNotSupportedException {
+        GraphDeepFirstSearch dfsSearch = new GraphDeepFirstSearch(this.mapNodePaths);
+        dfsSearch.printAllPossiblePaths(from, to);
     }
 
 

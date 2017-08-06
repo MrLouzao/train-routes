@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ThoughtWorksTest {
 
 
     @Before
-    public void setUp() throws PathAlreadyExistsException, BadFormatException, ConfigurationException {
+    public void setUp() throws PathAlreadyExistsException, BadFormatException, ConfigurationException, FileNotFoundException {
         String filePath = this.getClass().getClassLoader().getResource("graph.txt").getFile();
         List<String> lines = AppConfig.readFile(filePath);
         StationGraph graph = AppConfig.createStationGraphFromLines(lines);

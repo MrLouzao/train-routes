@@ -8,10 +8,7 @@ import com.though.train.model.Path;
 import com.though.train.model.Station;
 import com.though.train.model.StationGraph;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +17,10 @@ public final class AppConfig {
     private static final String INPUT_FILENAME = "graph.txt";
 
 
-    public static List<String> readFile(String filename) throws ConfigurationException{
+    public static List<String> readFile(String filename) throws ConfigurationException, FileNotFoundException{
         List<String> lines = new ArrayList<>();
-        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+        FileReader file = obtainFileByName(filename);
+        try(BufferedReader br = new BufferedReader(file)){
             String line = null;
             while( (line = br.readLine()) != null){
                 lines.add(line);
@@ -32,6 +30,21 @@ public final class AppConfig {
             throw new ConfigurationException("Cant find file " + filename);
         } catch(IOException ex){
             throw new ConfigurationException("Cant read file " + filename);
+        }
+    }
+
+
+    private static FileReader obtainFileByName(String filename) throws FileNotFoundException {
+        File file = new File(filename);
+        if(file.exists()){
+            return new FileReader(file);
+        } else {
+            file = new File( AppConfig.class.getClassLoader().getResource(filename).getFile() );
+            if(file.exists()){
+                return new FileReader(file);
+            } else{
+                throw new FileNotFoundException("Cant find file " + filename);
+            }
         }
     }
 

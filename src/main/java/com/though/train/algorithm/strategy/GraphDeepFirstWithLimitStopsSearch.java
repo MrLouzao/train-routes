@@ -1,4 +1,4 @@
-package com.though.train.algorithm;
+package com.though.train.algorithm.strategy;
 
 import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GraphDeepFirstWithLimitStopsSearch {
+public class GraphDeepFirstWithLimitStopsSearch implements GraphAlgorithmStrategy{
 
 
     final static Logger LOG = Logger.getLogger(GraphDeepFirstWithLimitStopsSearch.class);

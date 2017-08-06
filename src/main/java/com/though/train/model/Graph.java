@@ -1,9 +1,7 @@
 package com.though.train.model;
 
-import com.though.train.algorithm.GraphDeepFirstRepeatedNodes;
-import com.though.train.algorithm.GraphDeepFirstRepeatedNodesDistanceLimit;
-import com.though.train.algorithm.GraphDeepFirstSearch;
-import com.though.train.algorithm.GraphDeepFirstWithLimitStopsSearch;
+import com.though.train.algorithm.GraphAlgorithmExecutor;
+import com.though.train.algorithm.strategy.*;
 import com.though.train.exception.PathAlreadyExistsException;
 import com.though.train.exception.PathSearchException;
 
@@ -16,10 +14,12 @@ public abstract class Graph {
 
 
     protected Map<Node, List<Path>> adjacentNodes;
+    private GraphAlgorithmExecutor strategyToExecute;
 
 
     protected Graph() {
         this.adjacentNodes = new HashMap<Node, List<Path>>();
+        this.strategyToExecute = new GraphAlgorithmExecutor();
     }
 
 
@@ -54,26 +54,26 @@ public abstract class Graph {
 
 
     public List<List<Node>> obtainAllPossibleRoutesNoRepeatedNodes(Node from, Node to) throws PathSearchException {
-        GraphDeepFirstSearch dfsSearch = new GraphDeepFirstSearch(this.adjacentNodes);
-        return dfsSearch.obtainAllPossiblePaths(from, to);
+        this.strategyToExecute.setStrategy( GraphAlgorithmExecutor.GraphStrategy.DFS_NO_REPEAT_NODES, this.adjacentNodes );
+        return this.strategyToExecute.obtainAllPossiblePathsStrategy(from, to, null);
     }
 
 
     public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthOnSearch(Node from, Node to, Integer maxSteps) throws PathSearchException {
-        GraphDeepFirstWithLimitStopsSearch dfsWithLimitSearch = new GraphDeepFirstWithLimitStopsSearch(this.adjacentNodes);
-        return dfsWithLimitSearch.obtainAllPossiblePaths(from, to, maxSteps);
+        this.strategyToExecute.setStrategy( GraphAlgorithmExecutor.GraphStrategy.DFS_LIMIT_DEPTH, this.adjacentNodes );
+        return this.strategyToExecute.obtainAllPossiblePathsStrategy(from, to, maxSteps);
     }
 
 
     public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthAndRepeatedNodes(Node from, Node to, Integer maxSteps) throws PathSearchException{
-        GraphDeepFirstRepeatedNodes dfsWithRepeatedNodesSearch = new GraphDeepFirstRepeatedNodes(this.adjacentNodes);
-        return dfsWithRepeatedNodesSearch.obtainAllPossiblePaths(from, to, maxSteps);
+        this.strategyToExecute.setStrategy( GraphAlgorithmExecutor.GraphStrategy.DFS_REPEAT_NODES, this.adjacentNodes );
+        return this.strategyToExecute.obtainAllPossiblePathsStrategy(from, to, maxSteps);
     }
 
 
     public List<List<Node>> obtainAllPossibleRoutesWithDistanceLimitAndRepeatedNodes(Node from, Node to, Integer maxDistance) throws PathSearchException {
-        GraphDeepFirstRepeatedNodesDistanceLimit dfsWithDistanceLimit = new GraphDeepFirstRepeatedNodesDistanceLimit(this.adjacentNodes);
-        return dfsWithDistanceLimit.obtainAllPossiblePaths(from, to, maxDistance);
+        this.strategyToExecute.setStrategy( GraphAlgorithmExecutor.GraphStrategy.DFS_LIMIT_DISTANCE, this.adjacentNodes );
+        return this.strategyToExecute.obtainAllPossiblePathsStrategy(from, to, maxDistance);
     }
 
 

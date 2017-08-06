@@ -1,4 +1,4 @@
-package com.though.train.algorithm;
+package com.though.train.algorithm.strategy;
 
 import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class GraphDeepFirstRepeatedNodes {
+public class GraphDeepFirstRepeatedNodes implements GraphAlgorithmStrategy{
 
     final static Logger LOG = Logger.getLogger(GraphDeepFirstRepeatedNodes.class);
 

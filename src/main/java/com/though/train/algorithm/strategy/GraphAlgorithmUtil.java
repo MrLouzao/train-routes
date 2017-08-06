@@ -1,4 +1,4 @@
-package com.though.train.algorithm;
+package com.though.train.algorithm.strategy;
 
 import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;

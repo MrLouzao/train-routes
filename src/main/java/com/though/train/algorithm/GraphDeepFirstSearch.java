@@ -3,6 +3,7 @@ package com.though.train.algorithm;
 import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;
 import com.though.train.model.Path;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
  */
 public class GraphDeepFirstSearch {
 
+    final static Logger LOG = Logger.getLogger(GraphDeepFirstSearch.class);
 
     private Map<Node, List<Path>> mapAdjacentNodes;
 
@@ -24,6 +26,10 @@ public class GraphDeepFirstSearch {
 
 
     public List<List<Node>> printAllPossiblePaths(Node from, Node to) throws PathSearchException {
+
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Executing path finding with class " + GraphDeepFirstSearch.class.getName());
+        }
 
         // Save all constructed routes
         List<List<Node>> allAvailableRoutes = new ArrayList<>();
@@ -50,7 +56,10 @@ public class GraphDeepFirstSearch {
         }
 
 
-        System.out.println("Number of routes : " + allAvailableRoutes.size());
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Number of found routes: " + allAvailableRoutes.size());
+        }
+
         return allAvailableRoutes;
     }
 
@@ -65,7 +74,10 @@ public class GraphDeepFirstSearch {
 
         // If alg reachs the destination, add the list of nodes to constructed routes
         if(from.equals(to)){
-            GraphAlgorithmUtil.printAllNodesForRoute(route);
+            if(LOG.isDebugEnabled()){
+                String strRoute = GraphAlgorithmUtil.generateStringAllNodesForRoute(route);
+                LOG.debug(strRoute);
+            }
             constructedRoutes.add(GraphAlgorithmUtil.cloneNodeList(route));
         }
 

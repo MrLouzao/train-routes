@@ -14,9 +14,10 @@ public final class GraphAlgorithmUtil {
     protected static List<Node> obtainAdjacentNodes(Node from, Map<Node,List<Path>> mapAdjacentNodes){
         List<Node> adjacentNodes = new ArrayList<>();
         List<Path> outPaths = mapAdjacentNodes.get(from);
-        for(Path outPath : outPaths){
-            adjacentNodes.add(outPath.getTo());
-        }
+
+        outPaths.stream()
+                .forEach( (outPath) -> adjacentNodes.add(outPath.getTo())  );
+
         return adjacentNodes;
     }
 
@@ -24,21 +25,46 @@ public final class GraphAlgorithmUtil {
     protected static void printAllNodesForRoute(List<Node> route){
         StringBuilder sb = new StringBuilder();
         sb.append("Route: ");
-        for(Node node : route){
-            sb.append(node.getId() + " ");
-        }
+
+        route.stream()
+                .forEach( (node) -> sb.append(node.getId() + " ") );
+
         System.out.println(sb.toString());
+    }
+
+
+    protected static String generateStringAllNodesForRoute(List<Node> route){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Route: ");
+
+        route.stream()
+                .forEach( (node) -> sb.append(node.getId() + " ") );
+
+        return sb.toString();
     }
 
 
     protected static void printAllNodesForRoute(List<Node> route, Integer totalDistance){
         StringBuilder sb = new StringBuilder();
         sb.append("Route: ");
-        for(Node node : route){
-            sb.append(node.getId() + " ");
-        }
+
+        route.stream()
+                .forEach( (node) -> sb.append(node.getId() + " ") );
+
         sb.append("; distance = " + totalDistance);
         System.out.println(sb.toString());
+    }
+
+
+    protected static String generateStringAllNodesForRoute(List<Node> route, Integer totalDistance){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Route: ");
+
+        route.stream()
+                .forEach( (node) -> sb.append(node.getId() + " ") );
+
+        sb.append("; distance = " + totalDistance);
+        return sb.toString();
     }
 
 
@@ -77,5 +103,6 @@ public final class GraphAlgorithmUtil {
             }
         }
     }
+
 
 }

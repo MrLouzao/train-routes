@@ -3,6 +3,7 @@ package com.though.train.algorithm;
 import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;
 import com.though.train.model.Path;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class GraphDeepFirstWithLimitStopsSearch {
+
+
+    final static Logger LOG = Logger.getLogger(GraphDeepFirstWithLimitStopsSearch.class);
 
     private Map<Node, List<Path>> mapAdjacentNodes;
 
@@ -20,6 +24,10 @@ public class GraphDeepFirstWithLimitStopsSearch {
 
 
     public List<List<Node>> printAllPossiblePaths(Node from, Node to, Integer maxDepth) throws PathSearchException {
+
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Executing path finding with class " + GraphDeepFirstWithLimitStopsSearch.class.getName());
+        }
 
         // Save all constructed routes
         List<List<Node>> allAvailableRoutes = new ArrayList<>();
@@ -46,7 +54,10 @@ public class GraphDeepFirstWithLimitStopsSearch {
         }
 
 
-        System.out.println("Number of routes : " + allAvailableRoutes.size());
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Number of found routes: " + allAvailableRoutes.size());
+        }
+
         return allAvailableRoutes;
     }
 
@@ -61,7 +72,10 @@ public class GraphDeepFirstWithLimitStopsSearch {
 
         // If alg reachs the destination, add the list of nodes to constructed routes
         if(from.equals(to) && depthLevel < maxDepth){
-            GraphAlgorithmUtil.printAllNodesForRoute(route);
+            if(LOG.isDebugEnabled()){
+                String strRoute = GraphAlgorithmUtil.generateStringAllNodesForRoute(route);
+                LOG.debug(strRoute);
+            }
             constructedRoutes.add(GraphAlgorithmUtil.cloneNodeList(route));
         }
         //If algo not reachs the destination and not reachs the max depth level, process all available adjacent routes

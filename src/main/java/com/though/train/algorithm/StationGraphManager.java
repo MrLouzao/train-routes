@@ -56,7 +56,7 @@ public class StationGraphManager {
         }
 
 
-        public Integer getNumberOfRoutesLessThanGivenStops(String stationFrom, String stationTo, Integer numberOfStops) throws NotFoundException, PathSearchException {
+        public Integer getNumberOfRoutesWithLessThanGivenStops(String stationFrom, String stationTo, Integer numberOfStops) throws NotFoundException, PathSearchException {
             List<List<Node>> availableRoutes = this.getAllAvailableRoutesBetweenStations(stationFrom, stationTo);
             int counter = 0;
             for(List<Node> route : availableRoutes){

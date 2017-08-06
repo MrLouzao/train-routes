@@ -83,7 +83,7 @@ public class ComputeDistancesTest {
     @Test
     public void obtain_number_of_possible_routes_with_less_than_4_stops() throws NotFoundException, PathSearchException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        Integer numberOfStops = manager.getNumberOfRoutesLessThanGivenStops("A", "A", 4);
+        Integer numberOfStops = manager.getNumberOfRoutesWithLessThanGivenStops("A", "A", 4);
         Assert.assertSame(4, numberOfStops);
     }
 

@@ -25,7 +25,7 @@ public class GraphDeepFirstSearch {
     }
 
 
-    public List<List<Node>> printAllPossiblePaths(Node from, Node to) throws PathSearchException {
+    public List<List<Node>> obtainAllPossiblePaths(Node from, Node to) throws PathSearchException {
 
         if(LOG.isDebugEnabled()){
             LOG.debug("Executing path finding with class " + GraphDeepFirstSearch.class.getName());

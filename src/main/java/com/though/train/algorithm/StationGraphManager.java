@@ -56,11 +56,6 @@ public class StationGraphManager {
         }
 
 
-        public void printAllRoutes(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
-            this.graph.printAllPossiblePaths(stationFrom, stationTo);
-        }
-
-
         public Integer getNumberOfRoutesLessThanGivenStops(String stationFrom, String stationTo, Integer numberOfStops) throws NotFoundException, PathSearchException {
             List<List<Node>> availableRoutes = this.getAllAvailableRoutesBetweenStations(stationFrom, stationTo);
             int counter = 0;
@@ -124,7 +119,7 @@ public class StationGraphManager {
 
 
         public List<List<Node>> getAllAvailableRoutesBetweenStations(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
-            return this.graph.obtainAllPossibleRoutes(stationFrom, stationTo);
+            return this.graph.obtainAllPossibleRoutesNoRepeatNodes(stationFrom, stationTo);
         }
 
 

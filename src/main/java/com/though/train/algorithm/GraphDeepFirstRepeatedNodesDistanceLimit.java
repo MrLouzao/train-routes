@@ -22,7 +22,7 @@ public class GraphDeepFirstRepeatedNodesDistanceLimit {
     }
 
 
-    public List<List<Node>> printAllPossiblePaths(Node from, Node to, Integer maxDistance) throws PathSearchException {
+    public List<List<Node>> obtainAllPossiblePaths(Node from, Node to, Integer maxDistance) throws PathSearchException {
 
         if(LOG.isDebugEnabled()){
             LOG.debug("Executing path finding with class " + GraphDeepFirstRepeatedNodesDistanceLimit.class.getName());

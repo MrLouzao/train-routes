@@ -4,10 +4,10 @@ import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
 import com.though.train.exception.PathSearchException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class StationGraph extends Graph {
 
@@ -33,7 +33,6 @@ public class StationGraph extends Graph {
         if(!this.mapStationByName.containsKey(to.getId())){
             this.mapStationByName.put(to.getId(), to);
         }
-
     }
 
 
@@ -42,8 +41,8 @@ public class StationGraph extends Graph {
         Station fromStation = (Station) from;
         Station toStation = (Station) to;
 
-        if(super.mapNodePaths.containsKey(fromStation)){
-            List<Path> pathsRelated = super.mapNodePaths.get(fromStation);
+        if(super.adjacentNodes.containsKey(fromStation)){
+            List<Path> pathsRelated = super.adjacentNodes.get(fromStation);
             for(Path path : pathsRelated){
                 if(toStation.equals((Station)path.getTo())){
                     return path;
@@ -59,14 +58,6 @@ public class StationGraph extends Graph {
     }
 
 
-    @Override
-    protected String pathAlreadyExistsMsg(Path path) {
-        Station from = (Station) path.getFrom();
-        Station to = (Station) path.getTo();
-        return "Route between " + from.getId() + " and " + to.getId() + " already exists";
-    }
-
-
     public Node getNodeByStationId(String stationName) throws NotFoundException{
         Station station = this.mapStationByName.get(stationName);
         if(station == null){
@@ -76,17 +67,18 @@ public class StationGraph extends Graph {
     }
 
 
-    public void printAllPossiblePaths(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
-        Station from = (Station)this.getNodeByStationId(stationFrom);
-        Station to = (Station) this.getNodeByStationId(stationTo);
-        super.printAllPossiblePaths((Node)from, (Node)to);
+    @Override
+    protected String pathAlreadyExistsMsg(Path path) {
+        Station from = (Station) path.getFrom();
+        Station to = (Station) path.getTo();
+        return "Route between " + from.getId() + " and " + to.getId() + " already exists";
     }
 
 
-    public List<List<Node>> obtainAllPossibleRoutes(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
+    public List<List<Node>> obtainAllPossibleRoutesNoRepeatNodes(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
         Station from = (Station)this.getNodeByStationId(stationFrom);
         Station to = (Station) this.getNodeByStationId(stationTo);
-        return super.obtainAllPossibleRoutes((Node)from, (Node)to);
+        return super.obtainAllPossibleRoutesNoRepeatedNodes((Node)from, (Node)to);
     }
 
 
@@ -95,6 +87,7 @@ public class StationGraph extends Graph {
         Station to = (Station) this.getNodeByStationId(stationTo);
         return super.obtainAllPossibleRoutesWithMaxDepthOnSearch(from, to, maxTrips);
     }
+
 
     public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthAndRepeatedNodes(String stationFrom, String stationTo, Integer exactTrips) throws PathSearchException, NotFoundException {
         Station from = (Station)this.getNodeByStationId(stationFrom);

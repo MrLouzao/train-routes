@@ -23,7 +23,7 @@ public class GraphDeepFirstWithLimitStopsSearch {
     }
 
 
-    public List<List<Node>> printAllPossiblePaths(Node from, Node to, Integer maxDepth) throws PathSearchException {
+    public List<List<Node>> obtainAllPossiblePaths(Node from, Node to, Integer maxDepth) throws PathSearchException {
 
         if(LOG.isDebugEnabled()){
             LOG.debug("Executing path finding with class " + GraphDeepFirstWithLimitStopsSearch.class.getName());

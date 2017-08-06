@@ -2,10 +2,7 @@ package com.though.train;
 
 import com.though.train.algorithm.StationGraphManager;
 import com.though.train.config.AppConfig;
-import com.though.train.exception.BadFormatException;
-import com.though.train.exception.ConfigurationException;
-import com.though.train.exception.NotFoundException;
-import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.exception.*;
 import com.though.train.model.StationGraph;
 import org.junit.Assert;
 import org.junit.Before;
@@ -72,24 +69,23 @@ public class ThoughtWorksTest {
 
 
     @Test
-    public void get_number_of_trips_from_C_to_C_with_3_stops_maximum() throws NotFoundException, CloneNotSupportedException {
+    public void get_number_of_trips_from_C_to_C_with_3_stops_maximum() throws NotFoundException, PathSearchException {
         //Expected: 2
-        Integer numberOfTrips = this.manager.getNumberOfRoutesLessOrEqualsThanGivenStops("C", "C", 3);
+        Integer numberOfTrips = this.manager.getNumberOfRoutesWithMaxNumberOfStops("C", "C", 3);
         Assert.assertSame(2, numberOfTrips);
     }
 
 
     @Test
-    public void get_number_of_trips_from_A_to_C_with_exactly_4_stops() throws NotFoundException, CloneNotSupportedException {
+    public void get_number_of_trips_from_A_to_C_with_exactly_4_stops() throws NotFoundException, PathSearchException {
         //Expected: 3
-        // This might use the route
-        Integer numberOfTrips = this.manager.getNumberOfRoutesExactlyGivenStops("A", "C", 4);
+        Integer numberOfTrips = this.manager.getNumberOfRoutesWithRepeatedNodesAndExactNumberOfStops("A", "C", 4);
         Assert.assertSame(3, numberOfTrips);
     }
 
 
     @Test
-    public void get_length_of_shortest_path_from_A_to_C() throws NotFoundException, CloneNotSupportedException {
+    public void get_length_of_shortest_path_from_A_to_C() throws NotFoundException, PathSearchException {
         //Expected: 9
         Integer bestDistance = this.manager.getShortestPathBetweenStations("A", "C");
         Assert.assertSame(9, bestDistance);
@@ -97,15 +93,19 @@ public class ThoughtWorksTest {
 
 
     @Test
-    public void get_length_of_shortest_path_from_B_to_B() throws NotFoundException, CloneNotSupportedException {
+    public void get_length_of_shortest_path_from_B_to_B() throws NotFoundException, PathSearchException {
         //Expected: 9
         Integer bestDistance = this.manager.getShortestPathBetweenStations("B", "B");
         Assert.assertSame(9, bestDistance);
     }
 
 
-    public void get_number_of_different_routes_from_C_to_C_with_distance_less_than_30(){
+    @Test
+    public void get_number_of_different_routes_from_C_to_C_with_distance_less_than_30() throws NotFoundException, PathSearchException {
         //Expected: 7
+        Integer numberOfRoutes = this.manager.getNumberOfRoutesWithRepeatedNodesAndDistanceLimit("C", "C", 30);
+        Assert.assertSame(7, numberOfRoutes);
     }
+
 
 }

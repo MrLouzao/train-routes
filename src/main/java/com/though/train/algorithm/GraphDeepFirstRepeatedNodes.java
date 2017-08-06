@@ -8,23 +8,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
-/**
- * Implementation of Deep First Search algorithm for search paths
- */
-public class GraphDeepFirstSearch {
-
+public class GraphDeepFirstRepeatedNodes {
 
     private Map<Node, List<Path>> mapAdjacentNodes;
 
 
-    public GraphDeepFirstSearch(Map<Node, List<Path>> mapAdjacentNodes) {
+    public GraphDeepFirstRepeatedNodes(Map<Node, List<Path>> mapAdjacentNodes) {
         this.mapAdjacentNodes = mapAdjacentNodes;
     }
 
 
-    public List<List<Node>> printAllPossiblePaths(Node from, Node to) throws PathSearchException {
+    public List<List<Node>> printAllPossiblePaths(Node from, Node to, Integer maxDepth) throws PathSearchException {
 
         // Save all constructed routes
         List<List<Node>> allAvailableRoutes = new ArrayList<>();
@@ -43,11 +38,11 @@ public class GraphDeepFirstSearch {
             List<Node> adjacents = this.obtainAdjacentNodes(from);
             route.add(from);
             for(Node adjacent : adjacents){
-                this.searchAndPrintAllRoutes(adjacent, to, mapVisitedNodes, route, allAvailableRoutes);
+                this.searchAndPrintAllRoutesWithDepthLimit(adjacent, to, route, allAvailableRoutes, 1, maxDepth);
             }
         }
         else {
-            this.searchAndPrintAllRoutes(from, to, mapVisitedNodes, route, allAvailableRoutes);
+            this.searchAndPrintAllRoutesWithDepthLimit(from, to, route, allAvailableRoutes, 0, maxDepth);
         }
 
 
@@ -57,33 +52,28 @@ public class GraphDeepFirstSearch {
 
 
     //Recursive function to obtain and print all routes
-    private void searchAndPrintAllRoutes(Node from, Node to, Map<Node, Boolean> mapVisitedNodes, List<Node> route, List<List<Node>> constructedRoutes) throws PathSearchException {
+    private void searchAndPrintAllRoutesWithDepthLimit(Node from, Node to, List<Node> route, List<List<Node>> constructedRoutes, Integer depthLevel, Integer maxDepth) throws PathSearchException {
 
         // Mark node as visited and add to current path
-        mapVisitedNodes.put(from, true);
         route.add(from);
 
 
         // If alg reachs the destination, add the list of nodes to constructed routes
-        if(from.equals(to)){
+        if(from.equals(to) && depthLevel == maxDepth){
             this.printAllNodesForRoute(route);
             constructedRoutes.add(this.cloneNodeList(route));
         }
-
-        //If algo not reachs the destination, process all available adjacent routes
-        else{
+        //If algo not reachs the destination and not reachs the max depth level, process all available adjacent routes
+        else if(depthLevel < maxDepth){
             List<Node> adjacentNodes = this.obtainAdjacentNodes(from);
             for(Node adjacentNode : adjacentNodes){
                 //Only proccess not visited nodes in order to not repeat paths
-                if(!mapVisitedNodes.get(adjacentNode)){
-                    this.searchAndPrintAllRoutes(adjacentNode, to, mapVisitedNodes, route, constructedRoutes);
-                }
+                this.searchAndPrintAllRoutesWithDepthLimit(adjacentNode, to, route, constructedRoutes, depthLevel+1, maxDepth);
             }
 
         }
 
         //Finally, remove each node from path to go back within the tree (to re-visit parent nodes)
-        mapVisitedNodes.put(from, false);
         this.removeNodeFromVisitedNodesById(from.getId(), route);
     }
 
@@ -132,6 +122,5 @@ public class GraphDeepFirstSearch {
         }
         System.out.println(sb.toString());
     }
-
 
 }

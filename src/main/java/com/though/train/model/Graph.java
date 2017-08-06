@@ -1,7 +1,11 @@
 package com.though.train.model;
 
+import com.though.train.algorithm.GraphDeepFirstRepeatedNodes;
+import com.though.train.algorithm.GraphDeepFirstRepeatedNodesDistanceLimit;
 import com.though.train.algorithm.GraphDeepFirstSearch;
+import com.though.train.algorithm.GraphDeepFirstWithLimitStopsSearch;
 import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.exception.PathSearchException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,17 +73,34 @@ public abstract class Graph {
      * @param from
      * @param to
      */
-    public void printAllPossiblePaths(Node from, Node to) throws CloneNotSupportedException {
+    public void printAllPossiblePaths(Node from, Node to) throws PathSearchException {
         GraphDeepFirstSearch dfsSearch = new GraphDeepFirstSearch(this.mapNodePaths);
         dfsSearch.printAllPossiblePaths(from, to);
     }
 
 
-    public List<List<Node>> obtainAllPossibleRoutes(Node from, Node to) throws CloneNotSupportedException {
+    public List<List<Node>> obtainAllPossibleRoutes(Node from, Node to) throws PathSearchException {
         GraphDeepFirstSearch dfsSearch = new GraphDeepFirstSearch(this.mapNodePaths);
         return dfsSearch.printAllPossiblePaths(from, to);
     }
 
+
+    public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthOnSearch(Node from, Node to, Integer maxSteps) throws PathSearchException {
+        GraphDeepFirstWithLimitStopsSearch dfsWithLimitSearch = new GraphDeepFirstWithLimitStopsSearch(this.mapNodePaths);
+        return dfsWithLimitSearch.printAllPossiblePaths(from, to, maxSteps);
+    }
+
+
+    public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthAndRepeatedNodes(Node from, Node to, Integer maxSteps) throws PathSearchException{
+        GraphDeepFirstRepeatedNodes dfsWithRepeatedNodesSearch = new GraphDeepFirstRepeatedNodes(this.mapNodePaths);
+        return dfsWithRepeatedNodesSearch.printAllPossiblePaths(from, to, maxSteps);
+    }
+
+
+    public List<List<Node>> obtainAllPossibleRoutesWithDistanceLimitAndRepeatedNodes(Node from, Node to, Integer maxDistance) throws PathSearchException {
+        GraphDeepFirstRepeatedNodesDistanceLimit dfsWithDistanceLimit = new GraphDeepFirstRepeatedNodesDistanceLimit(this.mapNodePaths);
+        return dfsWithDistanceLimit.printAllPossiblePaths(from, to, maxDistance);
+    }
 
 
     protected String pathAlreadyExistsMsg(Path path){

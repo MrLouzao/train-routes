@@ -8,23 +8,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
-/**
- * Implementation of Deep First Search algorithm for search paths
- */
-public class GraphDeepFirstSearch {
-
+public class GraphDeepFirstRepeatedNodesDistanceLimit {
 
     private Map<Node, List<Path>> mapAdjacentNodes;
 
 
-    public GraphDeepFirstSearch(Map<Node, List<Path>> mapAdjacentNodes) {
+    public GraphDeepFirstRepeatedNodesDistanceLimit(Map<Node, List<Path>> mapAdjacentNodes) {
         this.mapAdjacentNodes = mapAdjacentNodes;
     }
 
 
-    public List<List<Node>> printAllPossiblePaths(Node from, Node to) throws PathSearchException {
+    public List<List<Node>> printAllPossiblePaths(Node from, Node to, Integer maxDistance) throws PathSearchException {
 
         // Save all constructed routes
         List<List<Node>> allAvailableRoutes = new ArrayList<>();
@@ -43,11 +38,13 @@ public class GraphDeepFirstSearch {
             List<Node> adjacents = this.obtainAdjacentNodes(from);
             route.add(from);
             for(Node adjacent : adjacents){
-                this.searchAndPrintAllRoutes(adjacent, to, mapVisitedNodes, route, allAvailableRoutes);
+                route.add(adjacent);
+                Integer distanceOriginToAdj = this.obtainDistanceBetweenNodes(from, adjacent);
+                this.searchAndPrintAllRoutesWithDepthLimit(adjacent, to, route, allAvailableRoutes, distanceOriginToAdj, maxDistance);
             }
         }
         else {
-            this.searchAndPrintAllRoutes(from, to, mapVisitedNodes, route, allAvailableRoutes);
+            this.searchAndPrintAllRoutesWithDepthLimit(from, to, route, allAvailableRoutes, 0, maxDistance);
         }
 
 
@@ -57,33 +54,26 @@ public class GraphDeepFirstSearch {
 
 
     //Recursive function to obtain and print all routes
-    private void searchAndPrintAllRoutes(Node from, Node to, Map<Node, Boolean> mapVisitedNodes, List<Node> route, List<List<Node>> constructedRoutes) throws PathSearchException {
-
-        // Mark node as visited and add to current path
-        mapVisitedNodes.put(from, true);
-        route.add(from);
-
+    private void searchAndPrintAllRoutesWithDepthLimit(Node from, Node to, List<Node> route, List<List<Node>> constructedRoutes, Integer currentDistance, Integer maxDistance) throws PathSearchException {
 
         // If alg reachs the destination, add the list of nodes to constructed routes
         if(from.equals(to)){
-            this.printAllNodesForRoute(route);
+            this.printAllNodesForRoute(route, currentDistance);
             constructedRoutes.add(this.cloneNodeList(route));
         }
 
-        //If algo not reachs the destination, process all available adjacent routes
-        else{
-            List<Node> adjacentNodes = this.obtainAdjacentNodes(from);
-            for(Node adjacentNode : adjacentNodes){
-                //Only proccess not visited nodes in order to not repeat paths
-                if(!mapVisitedNodes.get(adjacentNode)){
-                    this.searchAndPrintAllRoutes(adjacentNode, to, mapVisitedNodes, route, constructedRoutes);
-                }
+        List<Node> adjacentNodes = this.obtainAdjacentNodes(from);
+        for(Node adjacentNode : adjacentNodes){
+            //Only proccess next node if the distance between nodes ir less than max
+            Integer distanceOriginToAdj = this.obtainDistanceBetweenNodes(from, adjacentNode);
+            if((currentDistance+distanceOriginToAdj) < maxDistance){
+                route.add(adjacentNode);
+                this.searchAndPrintAllRoutesWithDepthLimit(adjacentNode, to, route, constructedRoutes, currentDistance+distanceOriginToAdj, maxDistance);
             }
 
         }
 
         //Finally, remove each node from path to go back within the tree (to re-visit parent nodes)
-        mapVisitedNodes.put(from, false);
         this.removeNodeFromVisitedNodesById(from.getId(), route);
     }
 
@@ -124,14 +114,25 @@ public class GraphDeepFirstSearch {
     }
 
 
-    private void printAllNodesForRoute(List<Node> route){
+    private Integer obtainDistanceBetweenNodes(Node from, Node to){
+        List<Path> outPaths = this.mapAdjacentNodes.get(from);
+        for(Path path : outPaths){
+            if(path.getTo().equals(to)){
+                return path.getDistance();
+            }
+        }
+        return null;
+    }
+
+
+    private void printAllNodesForRoute(List<Node> route, Integer totalDistance){
         StringBuilder sb = new StringBuilder();
         sb.append("Route: ");
         for(Node node : route){
             sb.append(node.getId() + " ");
         }
+        sb.append("; distance = " + totalDistance);
         System.out.println(sb.toString());
     }
-
 
 }

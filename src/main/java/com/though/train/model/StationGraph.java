@@ -2,6 +2,7 @@ package com.though.train.model;
 
 import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.exception.PathSearchException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,17 +76,37 @@ public class StationGraph extends Graph {
     }
 
 
-    public void printAllPossiblePaths(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+    public void printAllPossiblePaths(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
         Station from = (Station)this.getNodeByStationId(stationFrom);
         Station to = (Station) this.getNodeByStationId(stationTo);
         super.printAllPossiblePaths((Node)from, (Node)to);
     }
 
 
-    public List<List<Node>> obtainAllPossibleRoutes(String stationFrom, String stationTo) throws NotFoundException, CloneNotSupportedException {
+    public List<List<Node>> obtainAllPossibleRoutes(String stationFrom, String stationTo) throws NotFoundException, PathSearchException {
         Station from = (Station)this.getNodeByStationId(stationFrom);
         Station to = (Station) this.getNodeByStationId(stationTo);
         return super.obtainAllPossibleRoutes((Node)from, (Node)to);
+    }
+
+
+    public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthOnSearch(String stationFrom, String stationTo, Integer maxTrips) throws NotFoundException, PathSearchException {
+        Station from = (Station)this.getNodeByStationId(stationFrom);
+        Station to = (Station) this.getNodeByStationId(stationTo);
+        return super.obtainAllPossibleRoutesWithMaxDepthOnSearch(from, to, maxTrips);
+    }
+
+    public List<List<Node>> obtainAllPossibleRoutesWithMaxDepthAndRepeatedNodes(String stationFrom, String stationTo, Integer exactTrips) throws PathSearchException, NotFoundException {
+        Station from = (Station)this.getNodeByStationId(stationFrom);
+        Station to = (Station) this.getNodeByStationId(stationTo);
+        return super.obtainAllPossibleRoutesWithMaxDepthAndRepeatedNodes(from, to, exactTrips);
+    }
+
+
+    public List<List<Node>> obtainAllPossibleRoutesWithDistanceLimitAndRepeatedNodes(String stationFrom, String stationTo, Integer maxDistance) throws PathSearchException, NotFoundException {
+        Station from = (Station)this.getNodeByStationId(stationFrom);
+        Station to = (Station) this.getNodeByStationId(stationTo);
+        return super.obtainAllPossibleRoutesWithDistanceLimitAndRepeatedNodes(from, to, maxDistance);
     }
 
 

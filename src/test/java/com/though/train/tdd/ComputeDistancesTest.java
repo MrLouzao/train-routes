@@ -6,8 +6,8 @@ import com.though.train.config.AppConfig;
 import com.though.train.exception.BadFormatException;
 import com.though.train.exception.NotFoundException;
 import com.though.train.exception.PathAlreadyExistsException;
+import com.though.train.exception.PathSearchException;
 import com.though.train.model.Node;
-import com.though.train.model.Path;
 import com.though.train.model.StationGraph;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ComputeDistancesTest {
 
@@ -74,7 +73,7 @@ public class ComputeDistancesTest {
 
 
     @Test
-    public void obtain_number_of_possible_routes() throws NotFoundException, CloneNotSupportedException {
+    public void obtain_number_of_possible_routes() throws NotFoundException, PathSearchException {
         StationGraphManager manager = new StationGraphManager(this.graph);
         List<List<Node>> possibleRoutes = manager.getAllAvailableRoutesBetweenStations("A", "A");
         Assert.assertSame(5, possibleRoutes.size());
@@ -82,26 +81,58 @@ public class ComputeDistancesTest {
 
 
     @Test
-    public void obtain_number_of_possible_routes_with_less_than_4_stops() throws NotFoundException, CloneNotSupportedException {
+    public void obtain_number_of_possible_routes_with_less_than_4_stops() throws NotFoundException, PathSearchException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        Integer numberOfStops = manager.getNumberOfRoutesLessOrEqualsThanGivenStops("A", "A", 4);
+        Integer numberOfStops = manager.getNumberOfRoutesLessThanGivenStops("A", "A", 4);
         Assert.assertSame(4, numberOfStops);
     }
 
 
     @Test
-    public void obtain_number_of_possible_routes_with_exactly_4_stops() throws NotFoundException, CloneNotSupportedException {
+    public void obtain_number_of_possible_routes_with_exactly_3_stops() throws NotFoundException, PathSearchException {
         StationGraphManager manager = new StationGraphManager(this.graph);
-        Integer numberOfStops = manager.getNumberOfRoutesExactlyGivenStops("A", "A", 4);
-        Assert.assertSame(1, numberOfStops);
+        Integer numberOfStops = manager.getNumberOfRoutesExactlyGivenStops("A", "A", 3);
+        Assert.assertSame(4, numberOfStops);
     }
 
 
     @Test
-    public void obtain_shortest_route_between_two_nodes() throws NotFoundException, CloneNotSupportedException {
+    public void obtain_shortest_route_between_two_nodes() throws NotFoundException, PathSearchException {
         StationGraphManager manager = new StationGraphManager(this.graph);
         Integer routeLength = manager.getShortestPathBetweenStations("A", "A");
         Assert.assertSame(9, routeLength);
     }
+
+
+    @Test
+    public void obtain_number_of_trips_with_repeated_stations_and_four_stops() throws NotFoundException, PathSearchException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer routesWithFourStops = manager.getNumberOfRoutesWithRepeatedNodesAndExactNumberOfStops("A", "A", 4);
+        Assert.assertSame(1, routesWithFourStops);
+    }
+
+
+    @Test
+    public void obtain_number_of_trips_with_repeated_stations_and_three_stops() throws NotFoundException, PathSearchException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer routesWithFourStops = manager.getNumberOfRoutesWithRepeatedNodesAndExactNumberOfStops("A", "A", 3);
+        Assert.assertSame(4, routesWithFourStops);
+    }
+
+    @Test
+    public void obtain_number_of_trips_with_repeated_stations_and_six_stops() throws NotFoundException, PathSearchException {
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer routesWithFourStops = manager.getNumberOfRoutesWithRepeatedNodesAndExactNumberOfStops("A", "A", 6);
+        Assert.assertSame(17, routesWithFourStops);
+    }
+
+
+    @Test
+    public void obtain_number_of_trips_with_repeated_stations_and_distance_less_than_12() throws NotFoundException, PathSearchException{
+        StationGraphManager manager = new StationGraphManager(this.graph);
+        Integer routesWithFourStops = manager.getNumberOfRoutesWithRepeatedNodesAndDistanceLimit("A", "A", 12);
+        Assert.assertSame(2, routesWithFourStops);
+    }
+
 
 }

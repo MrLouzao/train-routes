@@ -4,6 +4,7 @@ import com.though.train.algorithm.StationGraphManager;
 import com.though.train.config.AppConfig;
 import com.though.train.exception.*;
 import com.though.train.model.StationGraph;
+import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -13,11 +14,16 @@ import java.util.List;
  * Hello world!
  *
  */
+
 public class App 
 {
+
+    static Logger LOG = Logger.getLogger(App.class);
+
     public static void main( String[] args ) throws ConfigurationException, PathAlreadyExistsException, BadFormatException, FileNotFoundException, PathSearchException {
 
         if(args.length == 0){
+            LOG.error("Must specify an input file");
             throw new ConfigurationException("Must specify an input file");
         }
 
